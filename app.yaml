@@ -19,6 +19,9 @@ handlers:
 - url: /img
   static_dir: img
   application_readable: true
+- url: /file
+  static_dir: file
+  application_readable: true
 - url: .*
   script: main.app
 
@@ -27,4 +30,6 @@ libraries:
 - name: jinja2
   version: latest
 - name: webapp2
+  version: latest
+- name: MySQLdb
   version: latest

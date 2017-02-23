@@ -1,19 +1,20 @@
 {% extends "templates/layout.html" %}
 {% block content %}
-  <h4>Know the Teams</h4>
-  <p><a name = "teams1">Where are the Premier League teams located in the UK?</a></p>
-  <div class="content">
-    <iframe width="750" height="450" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?q=select+col1+from+13nF11bjnkP_iv2NjJQoR7EOyzFUenKKLkXM3CQql&amp;viz=MAP&amp;h=false&amp;lat=53.125645902081445&amp;lng=-1.6932466621093454&amp;t=1&amp;z=6&amp;l=col1&amp;y=2&amp;tmplt=2&amp;hml=ONE_COL_LAT_LNG"></iframe>
-    <iframe width="750" height="450" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?q=select+col1+from+13nF11bjnkP_iv2NjJQoR7EOyzFUenKKLkXM3CQql+limit+1000&amp;viz=HEATMAP&amp;h=true&amp;lat=52.868598456773114&amp;lng=-1.5737703437499704&amp;t=1&amp;z=6&amp;l=col1&amp;y=3&amp;tmplt=3&amp;hmd=true&amp;hmg=%2366ff0000%2C%2393ff00ff%2C%23c1ff00ff%2C%23eeff00ff%2C%23f4e300ff%2C%23f4e300ff%2C%23f9c600ff%2C%23ffaa00ff%2C%23ff7100ff%2C%23ff3900ff%2C%23ff0000ff&amp;hmo=0.59&amp;hmr=19&amp;hmw=0&amp;hml=ONE_COL_LAT_LNG"></iframe>
-  </div>
-  <p><a name = "teams2">Who are the bigger teams in terms of market value?</a></p>
-  <div class="content">
-      <iframe width="500" height="300" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?containerId=googft-gviz-canvas&amp;q=select+col0%2C+col3+from+13nF11bjnkP_iv2NjJQoR7EOyzFUenKKLkXM3CQql+order+by+col3+desc+limit+20&amp;viz=GVIZ&amp;t=BAR&amp;uiversion=2&amp;gco_forceIFrame=true&amp;gco_hasLabelsColumn=true&amp;gco_tooltip=%7B%22isHtml%22%3Atrue%7D&amp;tmplt=5&amp;width=500&amp;height=300"></iframe>
-  </div>
-  <h4>Know the League History</h4>
-  <p><a name = "history">Who has won the league title in the past?</a></p>
-  <div class="content">
-      <iframe width="500" height="300" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?containerId=googft-gviz-canvas&amp;q=select+col1%3E%3E0%2C+count()+from+16NIrW2s8hkT1RL_y1ASB1xv3lC_K4asbAw_jt7pA+group+by+col1%3E%3E0+order+by+col1%3E%3E0+asc+limit+10&amp;viz=GVIZ&amp;t=PIE&amp;uiversion=2&amp;gco_forceIFrame=true&amp;gco_hasLabelsColumn=true&amp;width=500&amp;height=300"></iframe>
-      <iframe width="500" height="300" scrolling="no" frameborder="no" src="https://fusiontables.google.com/embedviz?containerId=googft-gviz-canvas&amp;q=select+col1%3E%3E0%2C+count()+from+16NIrW2s8hkT1RL_y1ASB1xv3lC_K4asbAw_jt7pA+group+by+col1%3E%3E0+order+by+count()+desc+limit+10&amp;viz=GVIZ&amp;t=BAR&amp;uiversion=2&amp;gco_forceIFrame=true&amp;gco_hasLabelsColumn=true&amp;width=500&amp;height=300"></iframe>
-  </div>
+<div class="content">
+  <h4>The four C's</h4>
+  <p><a name = "complete">Is the data complete? If not, what is missing and what concerns does it raise?</a></p>
+  <p>The data about the CMU college applicant’s profile is not complete. From 2005 till this year, I have only collected 975 students’ profiles from collegedata.com. We know that this year, the CMU undergraduate school receives 35,000 applications for different colleges/programs. The data collected from collegedata.com is provided by students voluntarily. Furthermore, the data is not complete because out of the 975 student profiles, there are many profiles have missing field.
+    I am really concerned about if this sample of size 975 is a good representation about the entire population of CMU applications’ profile.
+  </p>
+
+  <p><a name="coherent">Is the data coherent?Does it make sense relative to itself? Does it match your expectations?Is the data is distributed across its possible values in a way that makes sense?</a></p>
+    <p>The data really make sense and match my expectation for most of the parts. I expect the distribution of SAT score of all applicants follow a normal distribution. That is the amount of students who fall in the same SAT score bucket should be normally distributed, with more number of students centered to the mean and less to the two tails. From the actual data, we can visualize that the students’ SAT scores follow the normal distribution nicely except the rightmost end. There is an obvious bias on the number of students who scores very high SAT score. My hypothesis for this observation is that, students who get very high score on SAT are more likely to show off on social media. They have bigger probability to report their scores on collegedata.com because they might just feel proud.
+        I also expect that amount students who get accepted should have similar distribution but skewed to the right. Similarly, the students who are rejected should have a distribution skewed to the left. The data actually match my expectation.</p>
+
+  <p><a name="correct">Is the data correct? What aspects of this data can you verify? What did you find?</a></p>
+  <p>The data would be correct if the students who have been accepted should have a higher GPA and SAT score than the ones who are rejected. My finding actually matches this fact that there exists such difference among the two groups of students. </p>
+
+  <p><a name="accountable">Is the data accountable? Where did it come from? Who has access to it?</p>
+  <p>The data is from collegedata.com. So it is publicly available. The student who reports his/her profile should be accountable for it and they have the accessibility to modify it. It is reliable because it is totally anonymous so there is no incentive to lie about the admission decision.</p>
+ </div>
 {% endblock %}

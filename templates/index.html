@@ -1,18 +1,157 @@
+
 {% extends "templates/layout.html" %}
 {% block content %}
-  <div class="jumbotron">
-    <img src="https://upload.wikimedia.org/wikipedia/en/f/f2/Premier_League_Logo.svg">
-    <p class="lead">This is actually byte 3</p>
-    <p><a class="btn btn-lg btn-success" href="table" role="button">view the full league table</a></p>
-  </div>
-  <div class="row marketing">
-    <div class="col-lg-12">
-      <h4>Know the Teams</h4>
-      <p><a href="teamInfo#teams1">Where are the Premier League teams located in the UK?</a></p>
-      <p><a href="teamInfo#teams2">Who are the bigger teams in terms of market value?</a></p>
-
-      <h4>Know the League History</h4>
-      <p><a href="teamInfo#history">Who has won the league title in the past?</a></p>
+<body>
+    <div class=".text-info">
+      <h3>Question</h3>
+      <h5>How is my driving activity giving away how many classes I have skipped?</h5>
+      <ol>
+      <li>I claim to be a good student.</li>
+      <li>I drive to school everyday.</li>
+      <li>My cellphone keeps track of my activity status and it can identify when I am driving</li>
+      <li>For this byte, I will dig into my activity data collected on my phone.</li>
+      </ol>
     </div>
+    <div class=".text-info">
+        <h3>Collecting Activity Data</h3>
+        <h5> The data is obtained from plugin_ios_activity_recognition table </h5>
+        <ol>
+        <li> I have converted the timestamp into US estern time and only selects the activities that I care about, which is stationary, walking, running and automotive </li>
+        <li> My sql query <br> SELECT FROM_UNIXTIME((timestamp/1000)-5*60*60,'%Y-%m-%d') AS day, FROM_UNIXTIME((timestamp/1000)-5*60*60,'%H:%i') AS time, stationary, walking, running, automotive,cycling FROM plugin_ios_activity_recognition WHERE automotive = 1 or stationary = 1 or walking = 1 or running = 1;</li>
+        <li> Export it to csv </li>
+        <iframe width="500" height="100" scrolling="yes" frameborder="no" src="https://fusiontables.google.com/embedviz?viz=GVIZ&amp;t=TABLE&amp;q=select+col0%2C+col1%2C+col2%2C+col3%2C+col4%2C+col5+from+1_gFHoAyLUT28TdKTsvW-mCz3QnfK7pYXGXoI_LsR&amp;containerId=googft-gviz-canvas"></iframe>
+        </ol>
+    </div>
+    <div class=".text-info">
+        <h3>Processing Data</h3>
+        <h5> Manual Work is not good, let's script it up </h5>
+        <ol>
+            <li>
+                I want to group all my activity by hour per day.
+            </li>
+            <li>
+                To visualize all activity information within one hour, I came up with a metric to quantify weighted activities.
+            </li>
+            <li>
+                Therefore, I also give a weight to each activity type. Here I use weight 1 for stationary, 10 for walking, 20 for running and 50 for automotive. The weights are completely results of my iterative experiments using data visualization. I simply try to pick a weight for each activity so that it corresponds to the reality.
+            </li>
+            <li>
+                Write offline python script to process the csv to json
+                <xmp>
+dic = {}
+with open('rawdata.csv', 'rb') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
+    for row in reader:
+        datei = datetime.strptime(row[0], '%d/%m/%Y').strftime('%Y-%m-%d') + 'T'
+        timei = row[1][0:row[1].find(':')].zfill(2)
+        station = int(row[2])
+        walking = int(row[3])
+        running = int(row[4])
+        auto = int(row[5])
+        key = datei + timei + ':00:00'
+        score = 1*station + 10*walking + 20*running + 50*auto
+        if (key in dic) :
+            dic[key] += score
+        else:
+            dic[key] = score
+
+</xmp>
+            </li>
+        </ol>
+    </div>
+    <h3>Data Quality</h3>
+
+    <div class="tab">
+    <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Completeness')">Completeness</a>
+    <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Coherence')">Coherence</a>
+    <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Correctness')">Correctness</a>
+    <a href="javascript:void(0)" class="tablinks" onclick="openCity(event, 'Accountability')">Accountability</a>
+    </div>
+    <div id="Completeness" class="tabcontent" class=".text-info">
+      <h5>Is the data complete? If not, what is missing and what concerns does it raise?</h5></a></p>
+      <p>The data about the driving activity is pretty complete except for sometimes there are hours when no activity record is being created. This could due to data unavailability, e.g. IOS update or the activity recognition just cannot make an inference on what the current activity is. To visualize such incompleteness, I have saved a picture which describes how does the data look like before I manually cleaned it up.</p>
+      <img src="../img/incomletedata.jpeg"  HEIGHT="400" WIDTH="400">
+      <p>You see the white blocks in the graph? There are no data for that particular hour.</p>
+      <p>So I have manually put in the data for that hour. The data that I chose is a duplicate of the closest data entry</p>
+    </div>
+    <div id="Coherence" class="tabcontent" class=".text-info">
+      <p>The data is very coherent to the question that I want to answer because it only contains my activity for every hour each day.</p>
+      <p>I retrived over 6000 data entries for this activity experiment so that I can see the patterns of my driving hour. I made sure that the data corresponds to reality so that i can present it here.</p>
+
+    </div>
+    <div id="Correctness" class="tabcontent" class=".text-info">
+        <p> So the red means I am driving in that hour.</p>
+      <p>The data is extremely correct! Here is my confession, I have 9 am class from Monday to Thursday and I skipped two 9.am classes in this time interval and they are captured in the graph.</p>
+      <p>In Feb 9th and Feb 11th afternoon, I took my friend to DMV to take road test, I drove a lot in these two days</p>
+      <img src="../img/correctness.jpeg"  HEIGHT="400" WIDTH="400">
+    </div>
+
+    <div id="Accountability" class="tabcontent" class=".text-info">
+      <p>We can trust the data since it is uploaded directly from my phone, i.e. no intervention or modification. I did not bias my data just because I am using AWARE framework</p>
+    </div>
+  <div class="days-hours-heatmap">
+    <!-- calibration and render type controller -->
+    <div class="calibration" role="calibration">
+      <div class="group" role="example">
+        <svg width="120" height="17">
+        <rect width="17" height="17" x="0" fill="#f6faaa"></rect><rect width="17" height="17" x="18" fill="#FEE08B"></rect><rect width="17" height="17" x="36" fill="#FDAE61"></rect><rect width="17" height="17" x="54" fill="#F46D43"></rect><rect width="17" height="17" x="72" fill="#D53E4F"></rect><rect width="17" height="17" x="90" fill="#9E0142"></rect></svg>
+        <div role="description" class="description">
+          <label>Still  </label>
+          <label>&nbsp Walk</label>
+          <label>Drive</label>
+        </div>
+      </div>
+      <div role="toggleDisplay" class="display-control">
+        <div>
+          <input type="radio" name="displayType" checked="">
+          <label>Activity Score</label>
+        </div>
+
+        <!-- <div>
+          <input type="radio" name="displayType">
+          <label>daily</label>
+        </div> -->
+      </div>
+
   </div>
+  Hover on the block to see the total activity weight in that hour
+    <div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWed&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSun&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThu&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMon&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFri</div>
+    <!-- heatmap -->
+    <svg role="heatmap" class="heatmap" width="800" height="600">
+  </div>
+  <script type="text/javascript" src="../js/app.js"></script>
+  <div class=".text-info">
+    <h3>Inference</h3>
+    <h5>How is my driving activity giving away how many classes I have skipped?</h5>
+    <ol>
+    <li>By giving higher weight to automotive activity, we can classify the activity in terms of color.</li>
+    <li>Dark red means there are a lot of driving activities in that hour, shallow yellow is stationary and darker yellow denotes walking and running, the darker the corlor is, the more activities are there.</li>
+    <li>We see the pattern is that from Monday to Thursday, I try to get to school before 9 am because I have classes on these four days. However on 2/10, I came in late because at 9am I am still driving.</li>
+    <li>Even worse, on 2/14 and 2/15 I skipped 2 classes because I am driving at 11 and 10.</li>
+    <li>Shame!</li>
+    </ol>
+  </div>
+
+<script>
+function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
 {% endblock %}
