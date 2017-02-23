@@ -102,7 +102,11 @@
     rect.filter(function(d){ return d.value['Activity']>0;})
       .append('title')
       .text(function(d){
-        return monthDayFormat(d.date)+' '+d.value['Activity'];
+          var colorIndex = d3.scale.quantize()
+            .range(["Stationary","Moving","Walking","Running","Partially Driving","Driving"])
+            .domain([0,500]);
+
+        return 'hour: '+ hourFormat(d.date)+' '+colorIndex(d.value['Activity']);
       });
 
     renderColor();
@@ -143,7 +147,7 @@
         //choose color dynamicly
         var colorIndex = d3.scale.quantize()
           .range([0,1,2,3,4,5])
-          .domain((renderByCount?[0,500]:dailyValueExtent[d.day]));
+          .domain([0,500]);
 
         return d3.interpolate(a,colorCalibration[colorIndex(d.value['Activity'])]);
       });

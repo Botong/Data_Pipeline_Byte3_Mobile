@@ -114,12 +114,23 @@ with open('rawdata.csv', 'rb') as csvfile:
       </div>
 
   </div>
-  Hover on the block to see the total activity weight in that hour
+  <h3>Hover on the block to see the Activity</h3>
     <div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWed&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSun&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspThu&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspMon&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFri</div>
     <!-- heatmap -->
     <svg role="heatmap" class="heatmap" width="800" height="600">
   </div>
   <script type="text/javascript" src="../js/app.js"></script>
+  <div class=".text-info">
+    <h3>Instruction</h3>
+    <h5>What are the activities here?</h5>
+    <ol>
+    <li>Stationary : for most of the time I am not moving at all</li>
+    <li>Moving : there are walking activities in this hour, but it is not for most of the time in this hour</li>
+    <li>Walking : I am walking for most of time in this hour</li>
+    <li>Partially Driving : There are driving activities in this hour but not for most of time, 5 - 15 mins approximately</li>
+    <li>Driving: I am driving significantly in this hour, 20 - 30 mins approximately</li>
+    </ol>
+  </div>
   <div class=".text-info">
     <h3>Inference</h3>
     <h5>How is my driving activity giving away how many classes I have skipped?</h5>
