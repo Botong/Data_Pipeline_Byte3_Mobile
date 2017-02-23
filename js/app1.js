@@ -118,7 +118,7 @@
           var colorIndex = d3.scale.quantize()
             .range(["Stationary","Moving","Walking","Running","Partially Driving","Driving"])
             .domain([0,500]);
-        return 'hour: '+ hourFormat(d.date)+' '+colorIndex(d.value['Activity']);
+        return 'Date: '+ monthDayFormat(d.date) + '\n'+'Hour: '+ hourFormat(d.date)+'\n'+'State: '+colorIndex(d.value['Activity']);
     });
 
     renderColor();

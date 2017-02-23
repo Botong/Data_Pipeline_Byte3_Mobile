@@ -33,7 +33,7 @@
                 To visualize all activity information within one hour, I came up with a metric to quantify weighted activities.
             </li>
             <li>
-                Therefore, I also give a weight to each activity type. Here I use weight 1 for stationary, 10 for walking, 20 for running and 50 for automotive. The weights are completely results of my iterative experiments using data visualization. I simply try to pick a weight for each activity so that it corresponds to the reality.
+                Therefore, I also give a weight to each activity type. Here I use weight 1 for stationary, 10 for walking, 20 for running and 50 for automotive. The weights are completely results of my iterative experiments using data visualization. To impute the missing data, I simply try to pick a weight for each activity so that it corresponds to the reality.
             </li>
             <li>
                 Write offline python script to process the csv to json
@@ -69,15 +69,14 @@ with open('rawdata.csv', 'rb') as csvfile:
     </div>
     <div id="Completeness" class="tabcontent" class=".text-info">
       <h5>Is the data complete? If not, what is missing and what concerns does it raise?</h5></a></p>
-      <p>The data about the driving activity is pretty complete except for sometimes there are hours when no activity record is being created. This could due to data unavailability, e.g. IOS update or the activity recognition just cannot make an inference on what the current activity is. To visualize such incompleteness, I have saved a picture which describes how does the data look like before I manually cleaned it up.</p>
+      <p>The data about the driving activity is pretty complete except for sometimes there are hours when no activity record is being created. This could due to data unavailability, e.g. IOS update or the activity recognition just cannot make an inference on what the current activity is. To visualize such incompleteness, I have saved a picture which describes how does the data look like before I manually cleaned it up. The impact of this is not bad because all missing time are not driving hours, I can simply pick the closest data entry to represent the missing one</p>
       <img src="../img/incomletedata.jpeg"  HEIGHT="400" WIDTH="400">
       <p>You see the white blocks in the graph? There are no data for that particular hour.</p>
       <p>So I have manually put in the data for that hour. The data that I chose is a duplicate of the closest data entry</p>
     </div>
     <div id="Coherence" class="tabcontent" class=".text-info">
-      <p>The data is very coherent to the question that I want to answer because it only contains my activity for every hour each day.</p>
-      <p>I retrived over 6000 data entries for this activity experiment so that I can see the patterns of my driving hour. I made sure that the data corresponds to reality so that i can present it here.</p>
-
+      <p>The data is very coherent to my expectation. You can visualize it from the graph that all driving hours are captured and displayed properly on the graph</p>
+      <p>I retrived over 6000 data entries for this activity experiment so that I can see the patterns of my driving hour. Since I drive every weekday and I see at least two driving hours on weekday, therefore I can make sure that the data corresponds to reality so that i can present it here.</p>
     </div>
     <div id="Correctness" class="tabcontent" class=".text-info">
         <p> So the red means I am driving in that hour.</p>
