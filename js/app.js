@@ -108,7 +108,7 @@
 
         return 'hour: '+ hourFormat(d.date)+' '+colorIndex(d.value['Activity']);
       });
-
+      
     renderColor();
   });
 
