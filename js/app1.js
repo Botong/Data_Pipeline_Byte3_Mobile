@@ -97,7 +97,20 @@
       .attr('y',function(d){
         return hourFormat(d.date)*itemSize;
       })
-      .attr('fill','#ffffff');
+      .attr('fill','#ffffff')
+      .on("mouseover", function() {
+            d3.select(this)
+                .attr("fill", "blue");
+        })
+    .on("mouseout", function(d, i) {
+           d3.select(this).attr("fill", function(){
+             //choose color dynamicly
+             var colorIndex = d3.scale.quantize()
+               .range([0,1,2,3,4,5])
+               .domain([0,500]);
+             return colorCalibration[colorIndex(d.value['Activity'])];
+           });
+       });
 
     rect.filter(function(d){ return d.value['Activity']>0;})
       .append('title')
@@ -105,9 +118,8 @@
           var colorIndex = d3.scale.quantize()
             .range(["Stationary","Moving","Walking","Running","Partially Driving","Driving"])
             .domain([0,500]);
-
         return 'hour: '+ hourFormat(d.date)+' '+colorIndex(d.value['Activity']);
-      });
+    });
 
     renderColor();
   });
@@ -150,7 +162,8 @@
           .domain([0,500]);
 
         return d3.interpolate(a,colorCalibration[colorIndex(d.value['Activity'])]);
-      });
+      })
+      ;
   }
 
   //extend frame height in `http://bl.ocks.org/`
